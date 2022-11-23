@@ -4,12 +4,57 @@ from matplotlib import pyplot as plt
 from sklearn.metrics import r2_score
 
 def calculate_clahe(image):
-    clahe = cv2.createCLAHE(clipLimit=0.5, tileGridSize=(5,5)) 
+    clahe = cv2.createCLAHE(clipLimit=0.02, tileGridSize=(8,8)) 
+    # clahe = cv2.createCLAHE(clipLimit=0.5, tileGridSize=(8,8)) 
     clahe_image = clahe.apply(image)
     return clahe_image
 
 
-def image_cut(img):
+def image_cut(img, tracking = False):
+
+    def tracking_image(thresh_img, img):
+        plot_image(thresh_img)
+        plot_image(img)
+
+    def cropped_image_filter(original_img, cropped_img, min_width = 20/100, min_height = 20/100):
+        crop_h, crop_w = cropped_img.shape
+        origin_h, origin_w = original_img.shape
+        if crop_h >= min_height * origin_h and crop_w >= min_width * origin_w:
+            return True
+
+        return False
+
+    def second_cropped_image_filter(list_of_images, original_img):
+        if len(list_of_images) == 0:
+            return []
+        # Assume the desirable cropped img is alwasy has the smallest polynomial degree
+        filtered_image = list_of_images[0]
+        better_cropped_images = []
+        # Case when the images cut always stay the same. Accept the image.
+        for image in list_of_images:
+            crop_h, crop_w = image.shape
+            origin_h, origin_w = original_img.shape
+
+            # Case when the list of images has better cropped length. 
+            if crop_h != origin_h and crop_w != origin_w:
+                better_cropped_images.append(image)
+                break 
+        
+        if len(better_cropped_images) != 0:
+            best_image = better_cropped_images[0]
+            for image in better_cropped_images:
+                
+                crop_h, crop_w = image.shape
+                best_h, best_w = best_image.shape
+
+                # Case when the list of images has better cropped length. 
+                if crop_h > best_h and crop_w > best_w:
+                    best_image = image
+
+            filtered_image = best_image
+            
+        return filtered_image
+    
     def return_best_fit_polyfit_value(x, y):
         # This function serves for future improvement 
         Y = []
@@ -34,11 +79,11 @@ def image_cut(img):
 
         return Y
     
-    def experiment(img):
+    def experiment(img, tracking):
         hist,bins=np.histogram(img,bins=256)
         X=bins[0:-1]
-        return_image = None
-        degree_range = range(2,6)
+        return_images = []
+        degree_range = range(2,15)
         for degree in degree_range:
             # Find the polynomial fit
             p=np.polyfit(X,hist,degree)
@@ -68,26 +113,41 @@ def image_cut(img):
             # apply threshold value and cut the image
             thresh_img=cv2.threshold(img,thresh,255,cv2.THRESH_BINARY)[1]
             thresh_img = thresh_img.astype(np.uint8)
+            # plot_image(thresh_img)
             (cnts, _) = cv2.findContours(thresh_img.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
             if (len(cnts) == 0):
+                if (tracking):
+                    print(degree)
+                    print('cnts equal zero')
                 continue
             segmented = max(cnts, key=cv2.contourArea)
             (x,y,w,h) = cv2.boundingRect(segmented)
             crop_img=img[y:y+h,x:x+w]
 
-            # Get new width, height of cropped image as well as original image
-            crop_h, crop_w = crop_img.shape
-            origin_h, origin_w = img.shape
+            # If tracking is needed, plot thresh_img and crop_img in each iteration.
+            if tracking:
+                print(degree)
+                tracking_image(thresh_img, crop_img)
 
             # Check whether the cropped image ís actually cropped that captures fully the ROI. 
             # If the cropped image is not cropped at all then move on.
-            if crop_h != origin_w and crop_w != origin_w and crop_h >= 50 / 100 * origin_h and crop_w >= 50 / 100 * origin_w:
-                return_image = crop_img
-                break
+            if cropped_image_filter(img, crop_img):
+                return_images.append(crop_img)
+        
+        return return_images
 
-        return return_image
+    crop_images = experiment(img, tracking)
+    result_image = second_cropped_image_filter(crop_images, img)
 
-    return experiment(img)
+    return result_image
+
+def sharpening_image(img):
+    kernel = np.array([[0, -1, 0],
+                   [-1, 5,-1],
+                   [0, -1, 0]])
+    image_sharp = cv2.filter2D(src=img, ddepth=-1, kernel=kernel)
+    return image_sharp
+
 
 def plot_image(img):
     plt.imshow(img, cmap='gray')

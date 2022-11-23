@@ -6,6 +6,7 @@ import helper
 from matplotlib import pyplot as plt
 
 def load_data(data_dir):
+    count = 0
     sub_dirs = os.listdir(data_dir)
     images = []
     labels = []
@@ -21,23 +22,47 @@ def load_data(data_dir):
 
                 images.append(img)
                 labels.append(each_picture_path)
+                count += 1
+                print(count)
 
     return (images, labels)
 
 
 def preprocess_images(images):
+    count = 1
+    broken = 0
+    broken_index = dict()
     for img in images:
         # Code to change image to grayscale for preprocessing process
         preprocessed_image = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-
         preprocessed_image = helper.calculate_clahe(preprocessed_image)
-
         preprocessed_image = helper.image_cut(preprocessed_image)
+        print('In process', count)
+        # print(type(preprocessed_image))
+        # preprocessed_image = None
+        # print(preprocessed_image)
 
-        helper.plot_image(preprocessed_image)
+        # display_img_in_bulk(preprocessed_image)
+        
+        if len(preprocessed_image) == 0:
+            broken += 1
+            broken_index[count - 1] = img
+        count += 1
         # cv2.imshow("normal image", img)
         # cv2.imshow("after preprocessed", preprocessed_image)
         # cv2.waitKey(0)
+    print('broken = ', broken)
+    for key in broken_index.keys():
+        preprocessed_image = cv2.cvtColor(broken_index[key], cv2.COLOR_BGR2GRAY)
+        preprocessed_image = helper.calculate_clahe(preprocessed_image)
+        preprocessed_image = helper.image_cut(preprocessed_image, True)
+
+def display_img_in_bulk(img):
+    cv2.imshow('Window', img)
+
+    key = cv2.waitKey(200)
+    if key == 27:#if ESC is pressed, exit loop
+        cv2.destroyAllWindows()
 
 
 def main():
