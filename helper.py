@@ -9,6 +9,16 @@ def calculate_clahe(image):
     clahe_image = clahe.apply(image)
     return clahe_image
 
+def resize_image(img, width = 227, height = 227):
+    w, h = img.shape
+    resized_image = []
+    if w <= width or h <= height:
+        resized_image = cv2.resize(img, (width, height))
+
+    if w > width or h > height:
+        resized_image = cv2.resize(img, (width, height), interpolation = cv2.INTER_LINEAR)
+
+    return resized_image        
 
 def image_cut(img, tracking = False):
 
