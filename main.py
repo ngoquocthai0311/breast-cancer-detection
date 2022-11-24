@@ -6,7 +6,6 @@ import helper
 import tensorflow as tf
 
 from sklearn.model_selection import train_test_split
-from keras.preprocessing.image import ImageDataGenerator
 
 EPOCHS = 10
 IMG_WIDTH = 227
@@ -17,45 +16,29 @@ Benign_Masses = 0
 Malignant_Masses = 1
 
 def load_data(data_dir):
-    count = 0
+
     sub_dirs = os.listdir(data_dir)
     images = []
     labels = []
 
-    # Get the images from the folder
-    for sub_dir in sub_dirs:
-        picture_paths = os.listdir(os.path.join(data_dir, sub_dir))
-        for each_picture_path in picture_paths:
-            image_folder = os.listdir(os.path.join(data_dir, sub_dir, each_picture_path))
-            label = None
-            if each_picture_path == "Benign-Masses":
-                label = Benign_Masses
-            else:
-                label = Malignant_Masses
-            # print(image_folder)
-            for each_picture in image_folder:
-                # retrieve image
-                img = cv2.imread(os.path.join(data_dir, sub_dir, each_picture_path, each_picture))
+    for index,sub in enumerate(sub_dirs):
+        pictures_name = os.listdir(os.path.join(data_dir, sub))
+        for picture_name in pictures_name:
+            label = index
+            # retrieve image
+            img = cv2.imread(os.path.join(data_dir, sub, picture_name))
 
-                images.append(img)
-                labels.append(label)
-                count += 1
-                print(count)
+            images.append(img)
+            labels.append(label)
+            
 
     return (images, labels)
 
 def get_model():
-    """
-    Returns a compiled convolutional neural network model. Assume that the
-    `input_shape` of the first layer is `(IMG_WIDTH, IMG_HEIGHT, 3)`.
-    The output layer should have `NUM_CATEGORIES` units, one for each category.
-    """
     model = tf.keras.models.Sequential([
-        # Input layer without fitering
         tf.keras.Input(shape=(IMG_WIDTH, IMG_HEIGHT, 1)),
         tf.keras.layers.Rescaling(scale=1./127.5, offset=-1),
         tf.keras.layers.Normalization(),
-        # Convolutional layer. Learn 32 filters using a 3x3 kernel
         tf.keras.layers.Conv2D(8, (3, 3), strides=1, padding="same"),
         tf.keras.layers.BatchNormalization(),
         tf.keras.layers.ReLU(),
@@ -69,14 +52,7 @@ def get_model():
         tf.keras.layers.ReLU(),
         tf.keras.layers.Flatten(),
         tf.keras.layers.Dense(512, activation="relu"),
-        tf.keras.layers.Flatten(),
         tf.keras.layers.Dense(128, activation="relu"),
-        tf.keras.layers.Flatten(),
-        # # Hidden layer with dropout rate by 0.5
-        # tf.keras.layers.Dense(128, activation="relu"),
-        # tf.keras.layers.Dropout(0.5),   
-
-        # Add an output layer with output units for all 10 digits
         tf.keras.layers.Dense(NUM_CATEGORIES, activation="softmax"),
     ])
 
@@ -138,18 +114,12 @@ def main():
     )
 
     model = get_model()
-    
+
     # Fit model on training data
     model.fit(x_train, y_train, epochs=EPOCHS)
 
     # Evaluate neural network performance
     model.evaluate(x_test,  y_test, verbose=2)
-
-    # # Save model to file
-    # if len(sys.argv) == 3:
-    #     filename = sys.argv[2]
-    #     model.save(filename)
-    #     print(f"Model saved to {filename}.")
 
 
 if __name__ == "__main__":
