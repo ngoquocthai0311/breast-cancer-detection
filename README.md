@@ -12,7 +12,11 @@
 
 1. Rename the dataset as suggested.
 
-2. ```python
+2. ```
+   pip install -r .\requirements.txt
+   ```
+
+3. ```python
    python .\main.py .\path\to\dataset
    ```
 - The path to the dataset will be assumed that inside the folder will include 2 sub folders that are already categorized into 2 different classifications. The structure of the expected dataset will be looked like this:
