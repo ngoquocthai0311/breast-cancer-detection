@@ -103,22 +103,12 @@ def preprocess_images(images):
         preprocessed_image = helper.image_cut(preprocessed_image)
         preprocessed_image = helper.resize_image(preprocessed_image)
 
-        # preprocessed_image = tf.image.per_image_standardization(preprocessed_image)
-
         new_images.append(preprocessed_image)
-        # print(type(preprocessed_image))
-        # preprocessed_image = None
-        # print(preprocessed_image)
-
-        # display_img_in_bulk(preprocessed_image)
         
         if len(preprocessed_image) == 0:
             broken += 1
             broken_index[count - 1] = img
         count += 1
-        # cv2.imshow("normal image", img)
-        # cv2.imshow("after preprocessed", preprocessed_image)
-        # cv2.waitKey(0)
     print('broken = ', broken)
     for key in broken_index.keys():
         preprocessed_image = cv2.cvtColor(broken_index[key], cv2.COLOR_BGR2GRAY)
@@ -137,10 +127,6 @@ def display_img_in_bulk(img):
 
 def main():
 
-     # Check command-line arguments
-    # if len(sys.argv) not in [2, 3]:
-    #     sys.exit("Usage: python traffic.py data_directory [model.h5]")
-
     # Get image arrays and labels for all image files
     images, labels = load_data(sys.argv[1])
     images = preprocess_images(images)
@@ -151,38 +137,8 @@ def main():
         np.array(images), np.array(labels), test_size=TEST_SIZE
     )
 
-    # # ref: https://machinelearningmastery.com/how-to-normalize-center-and-standardize-images-with-the-imagedatagenerator-in-keras/
-    # # reshape dataset to have a single channel
-    # width, height, channels = x_train.shape[1], x_train.shape[2], 1
-    # x_train = x_train.reshape((x_train.shape[0], width, height, channels))
-    # x_test = x_test.reshape((x_test.shape[0], width, height, channels))
-    # # create generator to center images
-    # datagen = ImageDataGenerator(rescale=1.0/255.0 ,featurewise_center=True)
-    # # calculate mean on training dataset
-    # datagen.fit(x_train)
-    # # prepare an iterators to scale images
-    # train_iterator = datagen.flow(x_train, y_train)
-    # test_iterator = datagen.flow(x_test, y_test)
-
-    # Get a compiled neural network
     model = get_model()
-
-    # print(train_iterator[0])
-    # print(train_iterator[1])    
-    # Old code
-    # Fit model on training data
-    # model.fit(train_iterator[0], train_iterator[1], epochs=EPOCHS)
-
-    # Evaluate neural network performance
-    # model.evaluate(test_iterator[0], test_iterator[1], verbose=2)
-
-    # Fit model on training data
-    # model.fit_generator(train_iterator, steps_per_epoch=len(train_iterator), epochs=EPOCHS)
-
-    # # Evaluate neural network performance
-    # model.evaluate_generator(test_iterator,  steps=len(test_iterator), verbose=2)
-
-    # Old code
+    
     # Fit model on training data
     model.fit(x_train, y_train, epochs=EPOCHS)
 

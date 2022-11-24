@@ -5,7 +5,6 @@ from sklearn.metrics import r2_score
 
 def calculate_clahe(image):
     clahe = cv2.createCLAHE(clipLimit=0.02, tileGridSize=(8,8)) 
-    # clahe = cv2.createCLAHE(clipLimit=0.5, tileGridSize=(8,8)) 
     clahe_image = clahe.apply(image)
     return clahe_image
 
@@ -101,13 +100,6 @@ def image_cut(img, tracking = False):
             # calculate new value y using p(x)
             Y=np.polyval(p,X)
 
-            # Old code
-            # dY_abs=np.sort(np.abs(dY))
-            # ind=np.argsort(np.abs(dY))
-            # d2Y_abs=np.diff(dY_abs)
-            # voluem=np.min(d2Y_abs)
-            # i=np.argmin(d2Y_abs)
-
             # 2nd differentiate of new value y
             dY=np.diff(Y)
             dY_abs=np.sort(np.abs(dY))
@@ -150,13 +142,6 @@ def image_cut(img, tracking = False):
     result_image = second_cropped_image_filter(crop_images, img)
 
     return result_image
-
-def sharpening_image(img):
-    kernel = np.array([[0, -1, 0],
-                   [-1, 5,-1],
-                   [0, -1, 0]])
-    image_sharp = cv2.filter2D(src=img, ddepth=-1, kernel=kernel)
-    return image_sharp
 
 
 def plot_image(img):
