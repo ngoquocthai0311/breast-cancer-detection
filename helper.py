@@ -211,3 +211,10 @@ def convert_to_rgb(gray_images):
         rgb_imgs.append(cv2.cvtColor(img,cv2.COLOR_GRAY2RGB))
 
     return rgb_imgs
+
+def display_img_in_bulk(img, time):
+    cv2.imshow('Window', img)
+
+    key = cv2.waitKey(time)
+    if key == 27:#if ESC is pressed, exit loop
+        cv2.destroyAllWindows()
