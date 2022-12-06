@@ -95,30 +95,6 @@ def image_cut(img, tracking = False, hasBroken = False):
         return_images = []
         degree_range = range(2,15)
         for degree in degree_range:
-            # # Find the polynomial fit
-            # p=np.polyfit(X,hist,degree)
-
-            # # calculate new value y using p(x)
-            # Y=np.polyval(p,X)
-
-            # # 2nd differentiate of new value y
-            # dY=np.diff(Y)
-            # dY_abs=np.sort(np.abs(dY))
-            # d2Y_abs=np.diff(dY_abs)
-
-            # # get list sort index and get index that has min value
-            # ind=np.argsort(np.abs(d2Y_abs))
-            # i=np.argmin(d2Y_abs)
-
-            # # get threshold index value based on index of min value of 2nd differentiate function
-            # thresh=ind[i]
-
-            # # apply threshold value and cut the image
-            # thresh_img=cv2.threshold(img,thresh,255,cv2.THRESH_BINARY)[1]
-            # thresh_img = thresh_img.astype(np.uint8)
-
-            # plot_image(thresh_img)
-
             thresh_img = get_thresh_image(img, degree, (not hasBroken))
             (cnts, _) = cv2.findContours(thresh_img.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
             if (len(cnts) == 0):

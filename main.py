@@ -4,16 +4,7 @@ import sys
 import os
 import helper
 import tensorflow as tf
-from keras.layers import Dense, Activation, Dropout, Flatten, Conv2D, MaxPooling2D
-from keras.models import Model
-# from keras.layers.normalization import BatchNormalization
-from keras.models import Sequential
-
 import train_models_helper
-import create_dataset
-
-import torchvision.models as models
-
 from sklearn.model_selection import train_test_split
 
 EPOCHS = 5
