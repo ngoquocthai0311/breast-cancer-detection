@@ -4,7 +4,6 @@ from keras.models import Sequential
 from keras.models import Model
 from keras.applications.vgg16 import VGG16
 from keras.applications.vgg19 import VGG19
-import torchvision.models as models
 
 IMG_WIDTH = 227
 IMG_HEIGHT = 227

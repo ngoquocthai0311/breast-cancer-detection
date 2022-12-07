@@ -66,20 +66,20 @@ def main():
     train_models_helper.train_and_test_proposed_model(x_train, x_test, y_train, y_test)
 
 
-    train_models_helper.train_and_test_alexnet_model(x_train, x_test, y_train, y_test)
+    # train_models_helper.train_and_test_alexnet_model(x_train, x_test, y_train, y_test)
 
-    # train without transfer learning
-    train_models_helper.train_and_test_pretrained_vgg16_model(x_train, x_test, y_train, y_test)
+    # # train without transfer learning
+    # train_models_helper.train_and_test_pretrained_vgg16_model(x_train, x_test, y_train, y_test)
 
-    # train with transfer learning
-    train_models_helper.train_and_test_pretrained_vgg16_model(x_train, x_test, y_train, y_test, transfer_learning=True)
+    # # train with transfer learning
+    # train_models_helper.train_and_test_pretrained_vgg16_model(x_train, x_test, y_train, y_test, transfer_learning=True)
 
 
-    # train without transfer learning
-    train_models_helper.train_and_test_pretrained_vgg19_model(x_train, x_test, y_train, y_test)
+    # # train without transfer learning
+    # train_models_helper.train_and_test_pretrained_vgg19_model(x_train, x_test, y_train, y_test)
 
-    # train with transfer learning
-    train_models_helper.train_and_test_pretrained_vgg19_model(x_train, x_test, y_train, y_test, transfer_learning=True)
+    # # train with transfer learning
+    # train_models_helper.train_and_test_pretrained_vgg19_model(x_train, x_test, y_train, y_test, transfer_learning=True)
 
 
 
