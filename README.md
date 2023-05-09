@@ -6,7 +6,7 @@
 
 - The dataset is downloaded via this link: https://data.mendeley.com/datasets/ywsbh3ndr8/5
 
-- After having downloaded and extracted at the code base folder, the image folders must be renamed as they do not have spaces between words.
+- After having downloaded and extracted at the code base folder, the image folders must be renamed as they does not have spaces between words.
 
 ## How to run the code
 

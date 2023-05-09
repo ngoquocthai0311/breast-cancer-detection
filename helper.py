@@ -5,7 +5,6 @@ from sklearn.metrics import r2_score
 
 def calculate_clahe(image):
     clahe = cv2.createCLAHE(clipLimit=0.02, tileGridSize=(8,8)) 
-    # clahe = cv2.createCLAHE(clipLimit=2, tileGridSize=(8,8)) 
     clahe_image = clahe.apply(image)
     return clahe_image
 
