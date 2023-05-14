@@ -5,6 +5,7 @@ import os
 import helper
 import tensorflow as tf
 import train_models_helper
+from split_folder_into_train_and_val import split_preprocessed_images_to_train_and_val_folder
 
 
 def load_data(data_dir):
@@ -34,6 +35,9 @@ def load_data(data_dir):
 
 
 def main():
+    # Randomly split preprocessed images into training and validating folder
+    split_preprocessed_images_to_train_and_val_folder()
+
     # Get image arrays and labels for all image files
     images_train, labels_train, images_test, labels_test = load_data(sys.argv[1])
     x_train = np.array(images_train)
