@@ -29,3 +29,6 @@ def split_preprocessed_images_to_train_and_val_folder(train_ratio = .8, validate
 
     splitfolders.ratio(full_path_combineddataset, output=os.path.join(output_folder, relative_path_combineddataset),
         seed=1337, ratio=(train_ratio, validate_ratio), group_prefix=None, move=False) # default values
+
+def main():
+    split_preprocessed_images_to_train_and_val_folder()
