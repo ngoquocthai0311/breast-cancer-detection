@@ -6,6 +6,7 @@ import helper
 import tensorflow as tf
 import train_models_helper
 from split_folder_into_train_and_val import split_preprocessed_images_to_train_and_val_folder
+import shutil
 
 
 def load_data(data_dir):
@@ -35,24 +36,28 @@ def load_data(data_dir):
 
 
 def main():
+
     # Randomly split preprocessed images into training and validating folder
-    split_preprocessed_images_to_train_and_val_folder()
+    output_split = split_preprocessed_images_to_train_and_val_folder()
+
+    dataset_name = os.path.basename(os.path.dirname(sys.argv[1]))
+    print(dataset_name)
 
     # Get image arrays and labels for all image files
-    images_train, labels_train, images_test, labels_test = load_data(sys.argv[1])
+    images_train, labels_train, images_test, labels_test = load_data(os.path.join(os.getcwd(), output_split))
     x_train = np.array(images_train)
     x_test = np.array(images_test)
     y_train = np.array(tf.keras.utils.to_categorical(labels_train))
     y_test = np.array(tf.keras.utils.to_categorical(labels_test))
 
     # Train and validate latest proposed model
-    train_models_helper.train_and_test_proposed_model(x_train, x_test, y_train, y_test)
+    # train_models_helper.train_and_test_proposed_model(x_train, x_test, y_train, y_test)
 
     # # Train and validate alexnet model
     # train_models_helper.train_and_test_alexnet_model(x_train, x_test, y_train, y_test)
 
     # # Train and validate VGG16 model without applying transfer learning method
-    # train_models_helper.train_and_test_pretrained_vgg16_model(x_train, x_test, y_train, y_test)
+    train_models_helper.train_and_test_pretrained_vgg16_model(x_train, x_test, y_train, y_test)
 
     # # Train and validate alexnet model with applied transfer learning method
     # train_models_helper.train_and_test_pretrained_vgg16_model(x_train, x_test, y_train, y_test, transfer_learning=True)
@@ -64,4 +69,7 @@ def main():
     # train_models_helper.train_and_test_pretrained_vgg19_model(x_train, x_test, y_train, y_test, transfer_learning=True)
 
 if __name__ == "__main__":
+    previous_random_split_folder = os.path.join(os.getcwd(), r'output')
+    if os.path.exists(previous_random_split_folder):
+        shutil.rmtree(previous_random_split_folder)
     main()

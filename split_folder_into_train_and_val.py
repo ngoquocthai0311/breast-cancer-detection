@@ -1,9 +1,17 @@
 import splitfolders
 import os
+import random
+import sys
 
 # ref https://stackoverflow.com/questions/53074712/how-to-split-folder-of-images-into-test-training-validation-sets-with-stratified
 
+
+# delete previous randomly split dataset
+# cwd = os.getcwd()
+# os.rmdir(os.path.join(cwd, r'Dataset'))
+
 OUTPUT_FOLFDER = "output"
+INPUT_FOLFDER = "preprocessed"
 
 absolute_path = os.path.dirname(__file__)
 relative_path_DDSM = "Dataset/DDSM"
@@ -17,18 +25,43 @@ full_path_MIAS = os.path.join(absolute_path, relative_path_MIAS)
 full_path_combineddataset = os.path.join(absolute_path, relative_path_combineddataset)
 
 
-def split_preprocessed_images_to_train_and_val_folder(train_ratio = .8, validate_ratio = .2, output_folder = OUTPUT_FOLFDER):
-    splitfolders.ratio(full_path_DDSM, output=os.path.join(output_folder, relative_path_DDSM),
-    seed=1337, ratio=(train_ratio, validate_ratio), group_prefix=None, move=False) # default values
+def split_preprocessed_images_to_train_and_val_folder(dataset_name, train_ratio = .8, validate_ratio = .2, output_folder = OUTPUT_FOLFDER):
+    random.seed()
+    random_value = random.randint(1, 9999)
+    print(random_value)
+    
+    if dataset_name == "MIAS":
+        splitfolders.ratio(full_path_MIAS,
+                        output=output_folder,
+                        seed=random_value,
+                        ratio=(train_ratio, validate_ratio),
+                        group_prefix=None,
+                        move=False
+                        ) # default values
+    elif dataset_name == "INbreast":
+        splitfolders.ratio(full_path_INbreast,
+                    output=output_folder,
+                    seed=random_value,
+                    ratio=(train_ratio, validate_ratio),
+                    group_prefix=None,
+                    move=False) # default values
+    elif dataset_name == "DDSM":
+        splitfolders.ratio(full_path_DDSM,
+                       output=output_folder,
+                       seed=random_value,
+                       ratio=(train_ratio, validate_ratio),
+                       group_prefix=None,
+                       move=False) # default values
+    elif dataset_name == "INbreast+MIAS+DDSM":
+        splitfolders.ratio(full_path_combineddataset,
+                           output=output_folder,
+                           seed=random_value,
+                           ratio=(train_ratio, validate_ratio),
+                           group_prefix=None,
+                           move=False) # default values
+    return output_folder
 
-    splitfolders.ratio(full_path_INbreast, output=os.path.join(output_folder, relative_path_Inbreast),
-        seed=1337, ratio=(train_ratio, validate_ratio), group_prefix=None, move=False) # default values
+# def main():
+#     split_preprocessed_images_to_train_and_val_folder()
 
-    splitfolders.ratio(full_path_MIAS, output=os.path.join(output_folder, relative_path_MIAS),
-        seed=1337, ratio=(train_ratio, validate_ratio), group_prefix=None, move=False) # default values
-
-    splitfolders.ratio(full_path_combineddataset, output=os.path.join(output_folder, relative_path_combineddataset),
-        seed=1337, ratio=(train_ratio, validate_ratio), group_prefix=None, move=False) # default values
-
-def main():
-    split_preprocessed_images_to_train_and_val_folder()
+# main()

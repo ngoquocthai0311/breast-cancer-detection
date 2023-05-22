@@ -29,6 +29,7 @@ def get_proposed_model(IMG_WIDTH = 227, IMG_HEIGHT = 227, NUM_CATEGORIES = 2):
     tf.keras.layers.ReLU(),
     tf.keras.layers.Flatten(),
     tf.keras.layers.Dense(512, activation="relu"),
+    tf.keras.layers.Dropout(0.3),
     tf.keras.layers.Dense(128, activation="relu"),
     tf.keras.layers.Dense(NUM_CATEGORIES, activation="softmax"),
     ])

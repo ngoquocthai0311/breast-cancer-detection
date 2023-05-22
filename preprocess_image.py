@@ -44,19 +44,33 @@ def preprocess_images(images):
     return new_images
 
 
-def split_data_into_benign_malignant(images, labels):
+def split_data_into_benign_malignant(images, labels, base_folder_name):
     count = 0
     cwd = os.getcwd()
-    helper.display_img_in_bulk(img=images, time=27)
+    final_directory_benign = os.path.join(cwd, r'Dataset', base_folder_name, r'Benign Masses')
+    final_directory_malignt =  os.path.join(cwd, r'Dataset', base_folder_name, r'Malignant Masses')
+    if not os.path.exists(final_directory_benign) and not os.path.exists(final_directory_malignt):
+        os.makedirs(final_directory_benign)
+        os.makedirs(final_directory_malignt)
     for each_image in images:
         if str(labels[count]) == "0":
-            cv2.imwrite(os.path.join(cwd, f"processed/Benign Masses/{count}.png"), each_image)
+            cv2.imwrite(os.path.join(cwd, f"Dataset/{base_folder_name}/Benign Masses/{count}.png"), each_image)
         elif str(labels[count]) == "1":
-            cv2.imwrite(os.path.join(cwd, f"processed/Malignant Masses/{count}.png"), each_image)
+            cv2.imwrite(os.path.join(cwd, f"Dataset/{base_folder_name}/Malignant Masses/{count}.png"), each_image)
         count += 1
 
 
 def main():
+    # Get dataset name
+    dataset_name = os.path.basename(os.path.dirname(sys.argv[1]))
+
+    # Load data
     images, labels = load_data(sys.argv[1])
+
+    # Preprocessed images
     images = preprocess_images(images)
-    split_data_into_benign_malignant(images, labels)
+
+    # Split preprocessed image into two types based on their labels
+    split_data_into_benign_malignant(images, labels, dataset_name)
+
+main()
