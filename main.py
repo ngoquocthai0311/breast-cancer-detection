@@ -36,12 +36,10 @@ def load_data(data_dir):
 
 
 def main():
+    dataset_name = os.path.basename(os.path.dirname(sys.argv[1]))
 
     # Randomly split preprocessed images into training and validating folder
-    output_split = split_preprocessed_images_to_train_and_val_folder()
-
-    dataset_name = os.path.basename(os.path.dirname(sys.argv[1]))
-    print(dataset_name)
+    output_split = split_preprocessed_images_to_train_and_val_folder(dataset_name)
 
     # Get image arrays and labels for all image files
     images_train, labels_train, images_test, labels_test = load_data(os.path.join(os.getcwd(), output_split))
