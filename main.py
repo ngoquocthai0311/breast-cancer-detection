@@ -49,13 +49,13 @@ def main():
     y_test = np.array(tf.keras.utils.to_categorical(labels_test))
 
     # Train and validate latest proposed model
-    # train_models_helper.train_and_test_proposed_model(x_train, x_test, y_train, y_test)
+    train_models_helper.train_and_test_proposed_model(x_train, x_test, y_train, y_test)
 
     # # Train and validate alexnet model
     # train_models_helper.train_and_test_alexnet_model(x_train, x_test, y_train, y_test)
 
     # # Train and validate VGG16 model without applying transfer learning method
-    train_models_helper.train_and_test_pretrained_vgg16_model(x_train, x_test, y_train, y_test)
+    # train_models_helper.train_and_test_pretrained_vgg16_model(x_train, x_test, y_train, y_test)
 
     # # Train and validate alexnet model with applied transfer learning method
     # train_models_helper.train_and_test_pretrained_vgg16_model(x_train, x_test, y_train, y_test, transfer_learning=True)
