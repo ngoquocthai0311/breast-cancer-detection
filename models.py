@@ -45,6 +45,7 @@ def get_proposed_model(IMG_WIDTH = 227, IMG_HEIGHT = 227, NUM_CATEGORIES = 2):
 
     return model
 
+
 def get_alexnext_model():
     #Instantiation
     AlexNet = Sequential()
@@ -135,6 +136,7 @@ def get_pretrained_vgg16(transfer_learning = False):
         metrics=["accuracy"]
     )
     return model
+
 
 def get_pretrained_vgg19(transfer_learning = False):
     model = VGG19(include_top=False, input_shape=(227, 227, 3),  weights='imagenet')
