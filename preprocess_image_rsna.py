@@ -72,8 +72,8 @@ def split_data_into_benign_malignant_rsna(images, labels, image_ids):
     count = 0
     cwd = os.getcwd()
 
-    final_directory_benign = os.path.join(cwd, r'rsna_preprocessed', r'Benign Masses')
-    final_directory_malignt =  os.path.join(cwd, r'rsna_preprocessed', r'Malignant Masses')
+    final_directory_benign = os.path.join(cwd, r'Dataset', r'RSNA', r'Benign Masses')
+    final_directory_malignt =  os.path.join(cwd, r'Dataset', r'RSNA', r'Malignant Masses')
 
     if not os.path.exists(final_directory_benign) and not os.path.exists(final_directory_malignt):
         os.makedirs(final_directory_benign)
